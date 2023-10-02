@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "MoviesAPI": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "TABLE_NAME": "spedrunners-backend-table-eu-north-1-dev"
+      },
+      "applicationUrl": "https://localhost:59295;http://localhost:59296"
+    }
+  }
+}
