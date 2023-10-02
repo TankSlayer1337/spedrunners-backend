@@ -34,4 +34,9 @@ namespace MoviesAPI.DynamoDB.PropertyConversion
             return $"{_prefix}#{data}";
         }
     }
+
+    public class MovieIdConverter : PrefixedGuidConverter
+    {
+        protected override string _prefix => PropertyConverterConstants.MovieId;
+    }
 }
