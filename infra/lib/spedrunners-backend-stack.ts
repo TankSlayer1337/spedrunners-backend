@@ -90,7 +90,7 @@ export class SpedrunnersBackendStack extends cdk.Stack {
   private setupCognitoUserPool(projectName: string, envConfig: EnvironmentConfiguration): UserPool {
     const stage = envConfig.stage;
     const userPool = new UserPool(this, `${projectName}-user-pool-${this.region}-${stage}`, {
-      selfSignUpEnabled: true,
+      selfSignUpEnabled: false,
       userPoolName: `${projectName}-user-pool-${this.region}-${stage}`,
       signInAliases: { username: true, email: true },
       accountRecovery: AccountRecovery.EMAIL_ONLY,
