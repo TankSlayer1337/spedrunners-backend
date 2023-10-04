@@ -8,6 +8,7 @@ import { CognitoUserPoolsAuthorizer, LambdaIntegration, RestApi } from 'aws-cdk-
 import { DnsValidatedCertificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ARecord, HostedZone, RecordTarget } from 'aws-cdk-lib/aws-route53';
 import { ApiGateway } from 'aws-cdk-lib/aws-route53-targets';
+import { Policy, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 interface SpedrunnersBackendStackProps extends cdk.StackProps {
   envConfig: EnvironmentConfiguration
@@ -89,8 +90,20 @@ export class SpedrunnersBackendStack extends cdk.Stack {
 
   private setupCognitoUserPool(projectName: string, envConfig: EnvironmentConfiguration): UserPool {
     const stage = envConfig.stage;
+    const preSignUpLambda = new Function(this, 'PreSignUpLambda', {
+      functionName: `${projectName}-pre-sign-up-${this.region}-${stage}`,
+      runtime: Runtime.PYTHON_3_11,
+      code: Code.fromAsset('lib/pre-sign-up-function/build-package.zip'),
+      handler: 'pre-sign-up.lambda_handler',
+      timeout: cdk.Duration.seconds(10),
+      memorySize: 128,
+      reservedConcurrentExecutions: 1
+    });
     const userPool = new UserPool(this, `${projectName}-user-pool-${this.region}-${stage}`, {
       selfSignUpEnabled: false,
+      lambdaTriggers: {
+        preSignUp: preSignUpLambda
+      },
       userPoolName: `${projectName}-user-pool-${this.region}-${stage}`,
       signInAliases: { username: true, email: true },
       accountRecovery: AccountRecovery.EMAIL_ONLY,
@@ -99,6 +112,12 @@ export class SpedrunnersBackendStack extends cdk.Stack {
       },
       removalPolicy: cdk.RemovalPolicy.DESTROY
     });
+    preSignUpLambda.role!.attachInlinePolicy(new Policy(this, 'PreSignUpFunctionPolicy', {
+      statements: [ new PolicyStatement({
+        actions: ['cognito-idp:ListUsers', 'cognito-idp:AdminLinkProviderForUser'],
+        resources: [userPool.userPoolArn]
+      })]
+    }));
     userPool.addDomain('UserPoolDomain', {
       cognitoDomain: {
         domainPrefix: envConfig.cognitoHostedUiDomainPrefix
