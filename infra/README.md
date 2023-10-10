@@ -37,5 +37,9 @@ To build the Lambda package, move into the project folder and run:
     Compress-Archive pre-sign-up.py build-package.zip
 ```
 
+## Deploy CDK
+cdk deploy spedrunners-backend-eu-north-1-dev
+cdk deploy spedrunners-backend-eu-north-1-prod
+
 ## Limit Google sign in
 Did an ugly workaround to limit sign in to Google accounts of my choice. In order for it to work, the users has to be added through the console while the preSignUp trigger property for the user pool is undefined. After the users has been added, the trigger should be defined.
