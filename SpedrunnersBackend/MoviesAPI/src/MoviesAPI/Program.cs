@@ -3,7 +3,18 @@ using MoviesAPI.DynamoDB;
 using MoviesAPI.DynamoDB.Wrappers;
 using MoviesAPI.Utilities;
 
+const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173", "https://spedrunners.cloudchaotic.com");
+        });
+});
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -21,6 +32,7 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
+app.UseCors(myAllowSpecificOrigins);
 app.UseAuthorization();
 app.MapControllers();
 
