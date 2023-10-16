@@ -19,6 +19,17 @@ namespace MoviesAPI.DynamoDB
             await _dynamoDbContext.SaveAsync(movie);
         }
 
+        public async Task DeleteMovieAsync(string movieId)
+        {
+            var movies = await _dynamoDbContext.QueryAsync<Movie>(Movie.PK, Amazon.DynamoDBv2.DocumentModel.QueryOperator.Equal, new string[] { movieId });
+            if (movies == null || !movies.Any())
+            {
+                throw new BadHttpRequestException($"Movie with ID {movieId} was not found in the database.");
+            }
+
+            await _dynamoDbContext.DeleteAsync(movies.Single());
+        }
+
         public async Task<List<Movie>> GetMoviesAsync()
         {
             var movies = await _dynamoDbContext.QueryWithEmptyBeginsWith<Movie>(Movie.PK);
