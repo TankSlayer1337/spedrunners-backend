@@ -64,7 +64,7 @@ export class SpedrunnersBackendStack extends cdk.Stack {
         certificate: certificate
       }
     });
-    const proxyResource = api.root.addResource('test').addResource('{proxy+}');
+    const proxyResource = api.root.addResource('{proxy+}');
     proxyResource.addMethod('ANY', lambdaIntegration, {
       authorizer: new CognitoUserPoolsAuthorizer(this, 'CognitoAuthorizer', {
         cognitoUserPools: [userPool]
