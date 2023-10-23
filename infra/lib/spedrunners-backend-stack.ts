@@ -64,7 +64,7 @@ export class SpedrunnersBackendStack extends cdk.Stack {
         certificate: certificate
       }
     });
-    const proxyResource = api.root.addResource('{proxy+}');
+    const proxyResource = api.root.addResource('test').addResource('{proxy+}');
     proxyResource.addMethod('ANY', lambdaIntegration, {
       authorizer: new CognitoUserPoolsAuthorizer(this, 'CognitoAuthorizer', {
         cognitoUserPools: [userPool]
@@ -127,7 +127,7 @@ export class SpedrunnersBackendStack extends cdk.Stack {
     const fullAccessScope = new ResourceServerScope({ scopeName: '*', scopeDescription: 'Full access' });
     const resourceServer = userPool.addResourceServer('ResourceServer', {
       userPoolResourceServerName: 'Spedrunners API',
-      identifier: `https://${stage}.spedrunners.api.cloudchaotic.com`,
+      identifier: `https://${envConfig.stageSubDomain}spedrunners.api.cloudchaotic.com`,
       scopes: [fullAccessScope]
     });
 

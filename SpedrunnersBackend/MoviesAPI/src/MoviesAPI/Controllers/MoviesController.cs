@@ -6,7 +6,7 @@ using MoviesAPI.DynamoDB.Models;
 namespace MoviesAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("test/[controller]")]
     public class MoviesController : ControllerBase
     {
         private readonly MoviesRepository _moviesRepository;
