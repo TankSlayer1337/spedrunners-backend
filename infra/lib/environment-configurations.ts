@@ -28,7 +28,7 @@ export const prodConfiguration: EnvironmentConfiguration = {
   awsEnv: stockholm,
   projectName: projectName,
   stage: 'prod',
-  stageSubDomain: '',
+  stageSubDomain: 'prod.',
   origins: [ 'https://spedrunners.cloudchaotic.com' ],
   cognitoHostedUiDomainPrefix: 'spedrunners-prod'
 }
