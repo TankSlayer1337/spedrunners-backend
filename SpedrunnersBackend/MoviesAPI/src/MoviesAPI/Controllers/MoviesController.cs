@@ -22,6 +22,12 @@ namespace MoviesAPI.Controllers
             await _moviesRepository.AddMovieAsync(request);
         }
 
+        [HttpPost("update")]
+        public async Task UpdateMovie([FromBody] UpdateMovieRequest request)
+        {
+            await _moviesRepository.UpdateMovieAsync(request);
+        }
+
         [HttpDelete("{movieId}")]
         public async Task DeleteMovie(string movieId)
         {

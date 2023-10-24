@@ -36,5 +36,17 @@ namespace MoviesAPI.DynamoDB.Models
                 PickedBy = request.PickedBy,
             };
         }
+
+        public Movie CopyWithNewValues(UpdateMovieRequest request)
+        {
+            return new Movie
+            {
+                MovieId = MovieId,
+                Created = Created,
+                Title = request.Title ?? Title,
+                ImdbLink = request.ImdbLink ?? ImdbLink,
+                PickedBy = request.PickedBy ?? PickedBy
+            };
+        }
     }
 }
